@@ -9,4 +9,10 @@ public class CollectionsMath<e> {
         for(e x: list) if (x == item) occurrences++;
         return occurrences;
     }
+    public int selectMax(ArrayList<e> list, e item)
+    {
+        int occurrences = 0;
+        for(e x: list) if (x == item) occurrences++;
+        return occurrences;
+    }
 }

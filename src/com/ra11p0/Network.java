@@ -1,21 +1,11 @@
 package com.ra11p0;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Network {
-    public int get_hostCount() {
-        return _hostCount;
-    }
-
     private int _hostCount;
-
-    public int[] get_mask() {
-        return _mask;
-    }
-
     private int[] _mask = new int[4];
+    private int[] _networkAdress = new int[4];
 
     public Network(int mask[])
     {
@@ -34,13 +24,11 @@ public class Network {
     {
         int hosts = 2;
         while(hosts - 2 < hostCount) hosts *= 2;
-        _hostCount = hostCount;
+        _hostCount = hosts;
         String mask = Integer.toBinaryString(hosts-1) + "1";
         while(mask.length() <= 32) mask = 0 + mask;
-
         String fixedMask = "";
         for(char x: mask.toCharArray()) fixedMask = fixedMask + (x == '0' ? '1':'0');
-
         mask = "";
         int i = 0;
         for(char x:fixedMask.toCharArray())
@@ -52,11 +40,40 @@ public class Network {
             else
             {
                 _mask[i] = Integer.parseInt(mask, 2);
-                System.out.println(mask);
                 i++;
                 mask = "" + x;
             }
         }
 
     }
+
+    public int get_hostCount() {
+        return _hostCount;
+    }
+
+    public int[] get_mask() {
+        return _mask;
+    }
+
+    public int[] get_networkAdress() {
+        return _networkAdress;
+    }
+
+    public String get_networkAdressString() {
+        String temp = "";
+        for(int x:_networkAdress)temp=temp+x+".";
+        return temp.substring(0, temp.length()-1);
+    }
+
+    public String get_maskString() {
+        String temp = "";
+        for(int x:_mask)temp=temp+x+".";
+        return temp.substring(0, temp.length()-1);
+    }
+
+    public void set_networkAdress(int[] _networkAdress) {
+        this._networkAdress = _networkAdress.clone();
+    }
+
+
 }
