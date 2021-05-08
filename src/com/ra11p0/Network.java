@@ -6,6 +6,7 @@ public class Network {
     private int _hostCount;
     private int[] _mask = new int[4];
     private int[] _networkAdress = new int[4];
+    public String _name;
 
     public Network(int mask[])
     {
@@ -20,7 +21,7 @@ public class Network {
 
         _hostCount = (int)Math.pow(2, new CollectionsMath().count(tempMask, '0'));
     }
-    public Network(int hostCount)
+    public Network(String name, int hostCount)
     {
         int hosts = 2;
         while(hosts - 2 < hostCount) hosts *= 2;
@@ -44,7 +45,7 @@ public class Network {
                 mask = "" + x;
             }
         }
-
+        _name = name;
     }
 
     public int get_hostCount() {
@@ -53,6 +54,22 @@ public class Network {
 
     public int[] get_mask() {
         return _mask;
+    }
+
+    public String get_maskString() {
+        String temp = "";
+        for(int x:_mask)temp=temp+x+".";
+        return temp.substring(0, temp.length()-1);
+    }
+
+    public int get_maskDecimal()
+    {
+        String temp = "";
+        for (int i: _mask)
+        {
+            temp = temp + Integer.toBinaryString(i);
+        }
+        return temp.length();
     }
 
     public int[] get_networkAdress() {
@@ -65,9 +82,11 @@ public class Network {
         return temp.substring(0, temp.length()-1);
     }
 
-    public String get_maskString() {
+    public String get_networkBroadcastAdressString() {
         String temp = "";
-        for(int x:_mask)temp=temp+x+".";
+        int[] tempAdress = _networkAdress.clone();
+        tempAdress[3] += _hostCount-1;
+        for(int x:tempAdress)temp=temp+x+".";
         return temp.substring(0, temp.length()-1);
     }
 
