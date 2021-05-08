@@ -23,9 +23,9 @@ public class Window extends JFrame {
 
 
 
-        JButton calculateButton = new JButton();
-        JButton addButton = new JButton();
-        JButton removeButton = new JButton();
+        JButton calculateButton = new JButton("Calculate");
+        JButton addButton = new JButton("Add record");
+        JButton removeButton = new JButton("Remove last record");
 
         DefaultTableModel inputTableModel = new DefaultTableModel();
 
@@ -48,18 +48,23 @@ public class Window extends JFrame {
         outputTable.setEnabled(false);
 
         addButton.addActionListener(e -> inputTableModel.addRow(new Object[]{"*name*", "*hosts count*"}));
-        addButton.setText("Add record");
 
-        removeButton.addActionListener(e -> inputTableModel.removeRow(inputTableModel.getRowCount()-1));
-        removeButton.setText("Remove record");
-
-        calculateButton.setMaximumSize(new Dimension(100, 40));
-        calculateButton.setText("Calculate");
-        calculateButton.addActionListener(e ->
-        {
-            List<Network> networks = new ArrayList<Network>();
-            for (int i = 0; i< inputTableModel.getRowCount(); i++)
+        removeButton.addActionListener(e -> {
+            try {
+                inputTableModel.removeRow(inputTableModel.getRowCount() - 1);
+            }
+            catch (ArrayIndexOutOfBoundsException x)
             {
+                new JOptionPane().showMessageDialog(this, "There is no record to remove!","Error!", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        calculateButton.addActionListener(e -> {
+            if (inputTableModel.getRowCount() == 0 ) {
+                new JOptionPane().showMessageDialog(this, "Input table is empty!","Error!", JOptionPane.ERROR_MESSAGE);
+                return;}
+            List<Network> networks = new ArrayList<>();
+            for (int i = 0; i< inputTableModel.getRowCount(); i++) {
                 if (inputTable.isEditing()) inputTable.getCellEditor().stopCellEditing();
                 String name = inputTableModel.getValueAt(i, 0).toString();
                 int hosts;
@@ -69,17 +74,11 @@ public class Window extends JFrame {
                 }
                 catch (NumberFormatException x)
                 {
-                    System.err.println("Not a number");
+                    new JOptionPane().showMessageDialog(this, "Number format exception in input table!","Error!", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 networks.add(new Network(name, hosts));
             }
-
-            for (Network i: networks)
-            {
-                System.out.println(i.get_hostCount() + ", " + i._name);
-            }
-
         });
 
         inputScrollPane.setPreferredSize(new Dimension(400, 200));
