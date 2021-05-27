@@ -1,3 +1,5 @@
 # VLSM_Calculator
 
-*Unfinished* VLSM calculator written in java.
+VLSM calculator written in java.
+![home](/screenshots/ss1.png)
+

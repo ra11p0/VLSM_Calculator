@@ -117,7 +117,7 @@ public class Window extends JFrame {
 
             for (Network i: networks)
             {
-                outputTableModel.addRow(new Object[]{i._name, i.get_networkAdressString(), i.get_networkBroadcastAdressString(), i.get_maskDecimal()});
+                outputTableModel.addRow(new Object[]{i._name, i.get_networkAdressString(), i.get_networkBroadcastAdressString(),"/" +  i.get_maskDecimal()});
             }
         });
 
