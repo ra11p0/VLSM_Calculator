@@ -69,7 +69,7 @@ public class Network {
         {
             temp = temp + Integer.toBinaryString(i);
         }
-        return temp.length();
+        return temp.indexOf('0');
     }
 
     public int[] get_networkAdress() {

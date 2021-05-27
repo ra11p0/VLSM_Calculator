@@ -16,11 +16,6 @@ public class Window extends JFrame {
         this.setPreferredSize(new Dimension(440, 680));
         this.setResizable(false);
 
-        Object[][] data = {{"Kielce", "192.168.1.10", "a", "/24"},
-                           {"Warszawa", "192.168.2.10", "a", "/24"},
-                           {"Radom", "192.168.3.10", "a", "/24"}};
-        String[] columnNames = {"Name", "Network address", "Broadcast address", "Mask"};
-
 
 
         JButton calculateButton = new JButton("Calculate");
@@ -28,9 +23,10 @@ public class Window extends JFrame {
         JButton removeButton = new JButton("Remove last record");
 
         DefaultTableModel inputTableModel = new DefaultTableModel();
+        DefaultTableModel outputTableModel = new DefaultTableModel();
 
         JTable inputTable = new JTable(inputTableModel);
-        JTable outputTable = new JTable(data, columnNames);
+        JTable outputTable = new JTable(outputTableModel);
 
         JScrollPane inputScrollPane = new JScrollPane(inputTable);
         JScrollPane outputScrollPane = new JScrollPane(outputTable);
@@ -44,10 +40,15 @@ public class Window extends JFrame {
         inputTableModel.addColumn("Name");
         inputTableModel.addColumn("Number of hosts");
 
+        outputTableModel.addColumn("Name");
+        outputTableModel.addColumn("Network address");
+        outputTableModel.addColumn("Broadcast address");
+        outputTableModel.addColumn("Mask");
+
 
         inputTable.setSize(400, 200);
 
-        outputTable.setSize(new Dimension(400, 200));
+        outputTable.setSize(400, 200);
         outputTable.setEnabled(false);
 
         addButton.addActionListener(e -> inputTableModel.addRow(new Object[]{"*name*", "*hosts count*"}));
@@ -104,18 +105,20 @@ public class Window extends JFrame {
                         return;
                     }
                 }
-
             }
             rootAddressArea.setText(rootAddressArea.getText().substring(0, rootAddressArea.getText().length()-1));
 
             new Vlsm_calculator(networks, rootAddress);
 
-            for (Network i: networks)
+            for (int i = outputTableModel.getRowCount(); i > 0 ; i--)
             {
-                System.out.println(i.get_hostCount() + ", " + i.get_networkAdressString() + ", " + i.get_maskString());
+                outputTableModel.removeRow(i-1);
             }
 
-
+            for (Network i: networks)
+            {
+                outputTableModel.addRow(new Object[]{i._name, i.get_networkAdressString(), i.get_networkBroadcastAdressString(), i.get_maskDecimal()});
+            }
         });
 
         inputScrollPane.setPreferredSize(new Dimension(400, 200));
